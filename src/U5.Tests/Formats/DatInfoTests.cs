@@ -1,4 +1,5 @@
 using U5.Core.Formats.Dat;
+using Xunit;
 
 namespace U5.Tests.Formats
 {

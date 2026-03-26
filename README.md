@@ -12,10 +12,10 @@ This repository is the **toolkit / archaeology phase**.
 
 ## Repository layout
 
-- `src/U5.Core` - format models, parsers, diffing, formatting utilities, rendering scaffold.
+- `src/U5.Core` - format models, parsers, disassemblers, diffing, and formatting utilities.
 - `src/U5.Cli` - command-line interface entry point and command routing.
 - `src/U5.Tests` - deterministic bootstrap tests using synthetic fixtures.
-- `docs/file-formats` - format notes for TLK/NPC/GAM/DAT.
+- `docs/file-formats` - format notes for TLK/NPC/GAM/DAT/OVL.
 - `docs/subsystem-notes` - architecture and subsystem notes.
 - `samples` - optional local inputs for experimentation.
 - `output` - optional generated dump/diff output.
@@ -37,12 +37,12 @@ dotnet test Ultima5Tools.sln
 ```bash
 dotnet run --project src/U5.Cli -- tlk dump <path>
 dotnet run --project src/U5.Cli -- npc dump <path>
+dotnet run --project src/U5.Cli -- ovl info <path>
+dotnet run --project src/U5.Cli -- ool dump <path>
 dotnet run --project src/U5.Cli -- gam diff <leftPath> <rightPath>
 dotnet run --project src/U5.Cli -- dat info <path>
-dotnet run --project src/U5.Cli -- map render <path>
+dotnet run --project src/U5.Cli -- map render <path> [outputDir]
 ```
-
-`map render` is currently a stub command that confirms wiring and future extension points.
 
 ## Working with original Ultima V files
 
@@ -51,17 +51,20 @@ Place copies of original data files under `samples/` (for example `samples/origi
 - Do not modify original game data files.
 - Tests do not require original files.
 
-Optional example (if files are available locally):
+Optional examples (if files are available locally):
 
 ```bash
-dotnet run --project src/U5.Cli -- tlk dump samples/original/SAMPLE.TLK
-dotnet run --project src/U5.Cli -- npc dump samples/original/NPC
+dotnet run --project src/U5.Cli -- tlk dump samples/original/TOWNE.TLK
+dotnet run --project src/U5.Cli -- npc dump samples/original/TOWNE.NPC
+dotnet run --project src/U5.Cli -- ovl info samples/original/DATA.OVL
 ```
 
 ## Reverse-engineering status at this milestone
 
-- TLK parsing is implemented for header/table extraction and inferred block sizes.
-- NPC parsing currently treats files as fixed records (`256 x 18`) and preserves raw bytes.
+- TLK parsing now includes structured script-node disassembly, grouped OR-routes, and opcode-aware action rendering.
+- NPC parsing now understands the 8-map / 32-slot schedule layout and renders per-map schedule data.
+- DATA.OVL inspection now exposes the compressed-word table and key map-start tables used by TLK/NPC workflows.
 - GAM parsing is raw-byte focused with conservative changed-range diffing.
-- DAT support is metadata inspection only.
-- Map rendering is scaffolding only.
+- DAT support now includes first-pass parsing for settlement/world map families and LOOK2 descriptions.
+- OOL support now exposes raw 8-byte world-object records for BRIT/UNDER/SAVED style files.
+- Map rendering now emits SVG previews for TOWNE/DWELLING/CASTLE/KEEP plus BRIT/UNDER, including OOL world-object overlays for world maps when sibling files are present.

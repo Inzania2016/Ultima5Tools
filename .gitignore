@@ -1,0 +1,91 @@
+# Build output
+**/bin/
+**/obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+
+# Local tooling / generated artifacts
+artifacts/
+out/
+dist/
+
+# Sample data and private reverse-engineering inputs
+samples/**
+
+# Keep the folder structure
+!samples/
+!samples/.gitkeep
+!samples/output/
+!samples/output/.gitkeep
+
+output/*
+!output/.gitkeep
+
+# Zips / archives / dumps
+*.zip
+*.7z
+*.rar
+
+# Binary analysis / reverse-engineering workspace junk
+*.i64
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+*.asm
+*.lst
+*.map
+
+# Generated images / exports
+*.png
+*.bmp
+*.csv
+*.json
+
+# Environment / local config
+.env
+.env.*
+appsettings.Development.json
