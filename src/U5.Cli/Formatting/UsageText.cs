@@ -8,8 +8,9 @@ namespace U5.Cli
                 Environment.NewLine,
                 "Ultima5Tools CLI",
                 "Usage:",
-                "  tlk dump <path>",
-                "  npc dump <path>",
+                "  tlk dump <path>        (auto-loads sibling DATA.OVL when present)",
+                "  npc dump <path>        (auto-loads sibling DATA.OVL when present)",
+                "  ovl info <path>",
                 "  gam diff <leftPath> <rightPath>",
                 "  dat info <path>",
                 "  map render <path>");

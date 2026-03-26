@@ -1,6 +1,7 @@
 using U5.Core.Formats.Dat;
 using U5.Core.Formats.Gam;
 using U5.Core.Formats.Npc;
+using U5.Core.Formats.Ovl;
 using U5.Core.Formats.Tlk;
 using U5.Core.Rendering;
 
@@ -29,6 +30,11 @@ namespace U5.Cli
                 if (area == "npc" && action == "dump")
                 {
                     return RunNpcDump(args);
+                }
+
+                if (area == "ovl" && action == "info")
+                {
+                    return RunOvlInfo(args);
                 }
 
                 if (area == "gam" && action == "diff")
@@ -67,7 +73,14 @@ namespace U5.Cli
 
             TlkParser parser = new TlkParser();
             TlkFile file = parser.ParseFile(args[2]);
-            Console.WriteLine(TlkDumpFormatter.Format(file));
+
+            string? dataOvlPath = DataOvlInspector.TryLocateSiblingDataOvl(args[2]);
+            TlkDataOvlDictionary? dictionary = dataOvlPath is null ? null : TlkDataOvlDictionary.LoadFile(dataOvlPath);
+
+            TlkAnalysisService analysisService = new TlkAnalysisService();
+            TlkAnalysisReport report = analysisService.Analyze(file, dictionary, dataOvlPath);
+
+            Console.WriteLine(TlkDumpFormatter.Format(report, dictionary));
             return 0;
         }
 
@@ -81,7 +94,25 @@ namespace U5.Cli
 
             NpcParser parser = new NpcParser();
             NpcFile file = parser.ParseFile(args[2]);
-            Console.WriteLine(NpcDumpFormatter.Format(file));
+
+            string? dataOvlPath = DataOvlInspector.TryLocateSiblingDataOvl(args[2]);
+            DataOvlInfo? dataOvlInfo = dataOvlPath is null ? null : new DataOvlInspector().InspectFile(dataOvlPath);
+
+            Console.WriteLine(NpcDumpFormatter.Format(file, dataOvlInfo, dataOvlPath));
+            return 0;
+        }
+
+        private static int RunOvlInfo(string[] args)
+        {
+            if (args.Length != 3)
+            {
+                Console.Error.WriteLine("Usage: ovl info <path>");
+                return 1;
+            }
+
+            DataOvlInspector inspector = new DataOvlInspector();
+            DataOvlInfo info = inspector.InspectFile(args[2]);
+            Console.WriteLine(DataOvlFormatter.Format(info));
             return 0;
         }
 
